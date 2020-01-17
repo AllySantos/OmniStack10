@@ -16,13 +16,13 @@ module.exports = {
     
 
     //Procura devs pelo user do git
-    const findDev = Dev.findOne({github_username});
+    const resposta = await Dev.findOne({github_username})
 
     //Se n achar cadastra
-    if(!findDev){
+    if(!resposta){
 
         const response  = await axios.get(`https://api.github.com/users/${ github_username }`)
-        
+           
         const {name = login, avatar_url, bio}  = response.data
         
         const techsArray = stringAsArray(techs)
@@ -42,16 +42,12 @@ module.exports = {
             location
         
         })
-        
-        return res.json(devResponse)
 
+        return res.json(devResponse)
     }else{
 
-        return res.json({
-            message: 'Usuario ja existe'
-        })
-    }
+        return res.json(resposta)
 
-  
     }
+}
 }
